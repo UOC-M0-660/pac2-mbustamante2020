@@ -1,10 +1,13 @@
 package edu.uoc.pac2.ui
 
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import edu.uoc.pac2.MyApplication
 import edu.uoc.pac2.R
 import edu.uoc.pac2.data.Book
@@ -31,6 +34,8 @@ class BookListActivity : AppCompatActivity() {
         getBooks()
 
         // TODO: Add books data to Firestore [Use once for new projects with empty Firestore Database]
+        //var firestoreBookData:FirestoreBookData = edu.uoc.pac2.data.FirestoreBookData
+        //firestoreBookData.addBooksDataToFirestoreDatabase()
     }
 
     // Init Top Toolbar
@@ -53,7 +58,26 @@ class BookListActivity : AppCompatActivity() {
 
     // TODO: Get Books and Update UI
     private fun getBooks() {
+        val bookList = ArrayList<Book>()
+        val db = Firebase.firestore
 
+
+
+        //db.collection("books").
+        //val ​books: List<Book> = querySnapshot.documents.mapNotNull {it.toObject(Book::​class​.java)}
+
+        db.collection("books")
+                .addSnapshotListener { snapshots, e ->
+                    if (e != null) {
+                        Log.w(TAG, "Listen failed.", e)
+                        return@addSnapshotListener
+                    }
+
+                    for (doc in snapshots!!.documentChanges) {
+                        bookList.add(Book(title = doc.document.data["title"].toString(), author = doc.document.data["author"].toString()))
+                    }
+                    adapter.setBooks(bookList);
+                }
     }
 
     // TODO: Load Books from Room

@@ -1,6 +1,7 @@
 package edu.uoc.pac2
 
 import android.app.Application
+import android.util.Log
 import edu.uoc.pac2.data.*
 
 /**
@@ -12,6 +13,8 @@ class MyApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
+
+        Log.i("Application 1", "MyApplication" )
         // TODO: Init Room Database
         // TODO: Init BooksInteractor
     }

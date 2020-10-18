@@ -62,6 +62,7 @@ class BooksListAdapter(private var books: List<Book>) : RecyclerView.Adapter<Boo
         holder.authorView.text = book.author
 
         // TODO: Set View Click Listener
+        
     }
 
     // Returns total items in Adapter
