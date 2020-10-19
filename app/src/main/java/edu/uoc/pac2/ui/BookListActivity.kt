@@ -6,10 +6,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.room.Room
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import edu.uoc.pac2.MyApplication
 import edu.uoc.pac2.R
+import edu.uoc.pac2.data.ApplicationDatabase
 import edu.uoc.pac2.data.Book
 import edu.uoc.pac2.data.BooksInteractor
 
@@ -74,11 +76,24 @@ class BookListActivity : AppCompatActivity() {
                     }
 
                     for (doc in snapshots!!.documentChanges) {
-                        bookList.add(Book(title = doc.document.data["title"].toString(), author = doc.document.data["author"].toString()))
+                        bookList.add(
+                                Book( uid = doc.document.data["uid"].toString().toInt(),
+                                title = doc.document.data["title"].toString(),
+                                author = doc.document.data["author"].toString()
+                                )
+                        )
                     }
                     adapter.setBooks(bookList);
                 }
+
+
+
+        /*val db = Room.databaseBuilder(
+                applicationContext,
+                ApplicationDatabase.AppDatabase::class.java, "database-name"
+        ).build()*/
     }
+
 
     // TODO: Load Books from Room
     private fun loadBooksFromLocalDb() {
