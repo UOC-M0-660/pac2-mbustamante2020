@@ -1,9 +1,13 @@
 package edu.uoc.pac2.ui
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.NavUtils
+import com.google.android.material.snackbar.Snackbar
 import edu.uoc.pac2.R
 import kotlinx.android.synthetic.main.activity_book_detail.*
 
@@ -17,7 +21,22 @@ class BookDetailActivity : AppCompatActivity() {
         setContentView(R.layout.activity_book_detail)
 
         setSupportActionBar(detail_toolbar)
+
+        fab.setOnClickListener { view ->
+            //Snackbar.make(view, "Replace with your own detail action", Snackbar.LENGTH_LONG)
+            //        .setAction("Action", null).show()
+
+            val intent= Intent()
+            intent.action=Intent.ACTION_SEND
+            intent.putExtra(Intent.EXTRA_TEXT,"Hey Check out this Great app:")
+            intent.type="text/plain"
+            startActivity(Intent.createChooser(intent,"Share To:"))
+
+        }
+
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+
         // savedInstanceState is non-null when there is fragment state
         // saved from previous configurations of this activity
         // (e.g. when rotating the screen from portrait to landscape).
@@ -39,18 +58,20 @@ class BookDetailActivity : AppCompatActivity() {
     }
 
     // TODO: Override finish animation for actionbar back arrow
-    override fun onOptionsItemSelected(item: MenuItem) =
-            when (item.itemId) {
-                android.R.id.home -> {
-                    navigateUpTo(Intent(this, BookListActivity::class.java))
-                    true
-                }
-                else -> super.onOptionsItemSelected(item)
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            android.R.id.home -> {
+                NavUtils.navigateUpTo(this, Intent(this, BookListActivity::class.java))
+                overridePendingTransition(R.anim.translate_in_bottom, R.anim.translate_in_top)
+                return true
             }
+        }
+        return super.onOptionsItemSelected(item)
+    }
 
     // TODO: Override finish animation for phone back button
     override fun onBackPressed() {
         super.onBackPressed()
+        overridePendingTransition(R.anim.translate_out_bottom, R.anim.translate_out_top)
     }
-
 }

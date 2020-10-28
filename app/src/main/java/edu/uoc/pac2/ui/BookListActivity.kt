@@ -87,7 +87,7 @@ class BookListActivity : AppCompatActivity() {
                             )
                         }
                         adapter.setBooks(bookList);
-                        saveBooksToLocalDatabase(bookList)
+                        //saveBooksToLocalDatabase(bookList)
 
                     }
         } else {

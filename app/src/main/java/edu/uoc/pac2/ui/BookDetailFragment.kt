@@ -42,18 +42,21 @@ class BookDetailFragment : Fragment() {
         runBlocking {
             val id = (arguments?.get(ARG_ITEM_ID) ?: -1) as Int
             val book = BooksInteractor(context?.let { ApplicationDatabase.getInstance(it).bookDao() }!!).getBookById(id) as Book
-
-            activity?.toolbar_layout?.title = book.title
-            book_author.text = book.author
-            book_date.text = book.publicationDate
-            book_detail.text = book.description
-            Picasso.with(context).load(book.urlImage).into(book_image)
+            initUI(book)
         }
     }
 
     // TODO: Init UI with book details
     private fun initUI(book: Book) {
-       // throw NotImplementedError()
+        activity?.toolbar_layout?.title = book.title
+        Picasso.with(context).load(book.urlImage).into(activity?.toolbar_image)
+
+
+
+        book_author.text = book.author
+        book_date.text = book.publicationDate
+        book_detail.text = book.description
+        Picasso.with(context).load(book.urlImage).into(book_image)
     }
 
     // TODO: Share Book Title and Image URL
