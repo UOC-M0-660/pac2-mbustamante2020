@@ -12,7 +12,7 @@ import kotlinx.coroutines.*
  * Room Application Database
  */
 
-@Database(entities = [Book::class], version = 4)
+@Database(entities = [Book::class], version = 1)
 abstract class ApplicationDatabase: RoomDatabase() {
     abstract fun bookDao(): BookDao
 
