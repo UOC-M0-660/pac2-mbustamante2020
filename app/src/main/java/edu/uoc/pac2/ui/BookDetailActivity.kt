@@ -1,9 +1,11 @@
 package edu.uoc.pac2.ui
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import edu.uoc.pac2.R
+import kotlinx.android.synthetic.main.activity_book_detail.*
 
 /**
  * An activity representing a single Book detail screen.
@@ -14,6 +16,8 @@ class BookDetailActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_book_detail)
 
+        setSupportActionBar(detail_toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
         // savedInstanceState is non-null when there is fragment state
         // saved from previous configurations of this activity
         // (e.g. when rotating the screen from portrait to landscape).
@@ -35,9 +39,14 @@ class BookDetailActivity : AppCompatActivity() {
     }
 
     // TODO: Override finish animation for actionbar back arrow
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return super.onOptionsItemSelected(item)
-    }
+    override fun onOptionsItemSelected(item: MenuItem) =
+            when (item.itemId) {
+                android.R.id.home -> {
+                    navigateUpTo(Intent(this, BookListActivity::class.java))
+                    true
+                }
+                else -> super.onOptionsItemSelected(item)
+            }
 
     // TODO: Override finish animation for phone back button
     override fun onBackPressed() {

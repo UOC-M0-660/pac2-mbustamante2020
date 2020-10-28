@@ -6,14 +6,14 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.room.Room
+import androidx.room.ColumnInfo
+import androidx.room.PrimaryKey
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import edu.uoc.pac2.MyApplication
 import edu.uoc.pac2.R
-import edu.uoc.pac2.data.ApplicationDatabase
 import edu.uoc.pac2.data.Book
-import edu.uoc.pac2.data.BooksInteractor
+import kotlinx.coroutines.runBlocking
 
 /**
  * An activity representing a list of Books.
@@ -61,47 +61,56 @@ class BookListActivity : AppCompatActivity() {
     // TODO: Get Books and Update UI
     private fun getBooks() {
         val bookList = ArrayList<Book>()
-        val db = Firebase.firestore
 
+        var conection = (application as MyApplication).hasInternetConnection(this)
 
+        Log.i("BookListActivity", conection.toString())
 
-        //db.collection("books").
-        //val ​books: List<Book> = querySnapshot.documents.mapNotNull {it.toObject(Book::​class​.java)}
+        if( conection ) {
+            val db = Firebase.firestore
+            db.collection("books")
+                    .addSnapshotListener { snapshots, e ->
+                        if (e != null) {
+                            Log.w(TAG, "Listen failed.", e)
+                            return@addSnapshotListener
+                        }
 
-        db.collection("books")
-                .addSnapshotListener { snapshots, e ->
-                    if (e != null) {
-                        Log.w(TAG, "Listen failed.", e)
-                        return@addSnapshotListener
+                        for (doc in snapshots!!.documentChanges) {
+                            bookList.add(
+                                    Book(uid = doc.document.data["uid"].toString().toInt(),
+                                            author = doc.document.data["author"].toString(),
+                                            description = doc.document.data["description"].toString(),
+                                            publicationDate = doc.document.data["publicationDate"].toString(),
+                                            title = doc.document.data["title"].toString(),
+                                            urlImage = doc.document.data["urlImage"].toString()
+                                    )
+                            )
+                        }
+                        adapter.setBooks(bookList);
+                        saveBooksToLocalDatabase(bookList)
+
                     }
-
-                    for (doc in snapshots!!.documentChanges) {
-                        bookList.add(
-                                Book( uid = doc.document.data["uid"].toString().toInt(),
-                                title = doc.document.data["title"].toString(),
-                                author = doc.document.data["author"].toString()
-                                )
-                        )
-                    }
-                    adapter.setBooks(bookList);
-                }
-
-
-
-        /*val db = Room.databaseBuilder(
-                applicationContext,
-                ApplicationDatabase.AppDatabase::class.java, "database-name"
-        ).build()*/
+        } else {
+            loadBooksFromLocalDb()
+        }
     }
 
 
     // TODO: Load Books from Room
     private fun loadBooksFromLocalDb() {
-        throw NotImplementedError()
+        //throw NotImplementedError()
+        Log.i("BookListActivity", "loadBooksFromLocalDb")
+        runBlocking {
+            adapter.setBooks((application as MyApplication).getBooksInteractor().getAllBooks())
+        }
     }
 
     // TODO: Save Books to Local Storage
     private fun saveBooksToLocalDatabase(books: List<Book>) {
-        throw NotImplementedError()
+        //throw NotImplementedError()
+        Log.i("BookListActivity", "saveBooksToLocalDatabase")
+        runBlocking {
+            (application as MyApplication).getBooksInteractor().saveBooks(books)
+        }
     }
 }
