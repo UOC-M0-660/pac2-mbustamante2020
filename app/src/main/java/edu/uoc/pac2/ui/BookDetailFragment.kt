@@ -30,35 +30,17 @@ class BookDetailFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         // Get Book for this detail screen
-
         loadBook()
     }
 
 
     // TODO: Get Book for the given {@param ARG_ITEM_ID} Book id
     private fun loadBook() {
-
         if (arguments?.containsKey(ARG_ITEM_ID)!!) {
-            //val id:Int? = arguments?.getInt(ARG_ITEM_ID)
-            var id:Int? = ((arguments?.get(ARG_ITEM_ID) ?: -1) as Int?)
-
-            Log.i("fragment", "fragment $id")
-
-            //id = ((id == null) ?: -1) as Int?
+            val id:Int? = ((arguments?.get(ARG_ITEM_ID) ?: -1) as Int?)
             val book = BooksInteractor(context?.let { ApplicationDatabase.getInstance(it).bookDao() }!!).getBookById(id!!) as Book
-            //AsyncTask.execute {
-                initUI(book)
-            //}
-        }
-
-
-        //val id = (arguments?.get(ARG_ITEM_ID) ?: "-1") as String
-
-        /* as Int
-        val book = BooksInteractor(context?.let { ApplicationDatabase.getInstance(it).bookDao() }!!).getBookById(id) as Book
-        AsyncTask.execute {
             initUI(book)
-        }*/
+        }
     }
 
     // TODO: Init UI with book details
@@ -69,7 +51,7 @@ class BookDetailFragment : Fragment() {
         book_author.text = book.author
         book_date.text = book.publicationDate
         book_detail.text = book.description
-        Picasso.with(context).load(book.urlImage).into(book_image)
+        //Picasso.with(context).load(book.urlImage).into(book_image)
 
         activity?.fab?.setOnClickListener {
             shareContent(book)
@@ -83,7 +65,7 @@ class BookDetailFragment : Fragment() {
             this.putExtra(Intent.EXTRA_TEXT, "Title: ${book.title} \nImage URL: ${book.urlImage}")
             this.type="text/plain"
         }
-        startActivity(intent)
+        startActivity(Intent.createChooser(intent, "Share To:"))
     }
 
     companion object {

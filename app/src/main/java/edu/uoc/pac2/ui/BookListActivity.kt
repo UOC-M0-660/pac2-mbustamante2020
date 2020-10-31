@@ -1,23 +1,24 @@
 package edu.uoc.pac2.ui
 
+import android.os.AsyncTask
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.room.ColumnInfo
-import androidx.room.PrimaryKey
 import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.MobileAds
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import edu.uoc.pac2.MyApplication
 import edu.uoc.pac2.R
 import edu.uoc.pac2.data.Book
-import kotlinx.coroutines.runBlocking
+import edu.uoc.pac2.data.FirestoreBookData
 
 /**
  * An activity representing a list of Books.
@@ -46,8 +47,10 @@ class BookListActivity : AppCompatActivity() {
         getBooks()
 
         // TODO: Add books data to Firestore [Use once for new projects with empty Firestore Database]
-        //var firestoreBookData:FirestoreBookData = edu.uoc.pac2.data.FirestoreBookData
-        //firestoreBookData.addBooksDataToFirestoreDatabase()
+        /*
+        var firestoreBookData:FirestoreBookData = edu.uoc.pac2.data.FirestoreBookData
+        firestoreBookData.addBooksDataToFirestoreDatabase()
+        */
     }
 
     // Init Top Toolbar
@@ -70,34 +73,23 @@ class BookListActivity : AppCompatActivity() {
 
     // TODO: Get Books and Update UI
     private fun getBooks() {
-        val bookList = ArrayList<Book>()
-
-        var conection = (application as MyApplication).hasInternetConnection(this)
+        val conection = (application as MyApplication).hasInternetConnection(this)
 
         Log.i("BookListActivity", conection.toString())
-
         if( conection ) {
             val db = Firebase.firestore
-            db.collection("books")
-                    .addSnapshotListener { snapshots, e ->
-                        if (e != null) {
-                            Log.w(TAG, "Listen failed.", e)
-                            return@addSnapshotListener
-                        }
+            var books: List<Book>?
 
-                        for (doc in snapshots!!.documentChanges) {
-                            bookList.add(
-                                    Book(uid = doc.document.data["uid"].toString().toInt(),
-                                            author = doc.document.data["author"].toString(),
-                                            description = doc.document.data["description"].toString(),
-                                            publicationDate = doc.document.data["publicationDate"].toString(),
-                                            title = doc.document.data["title"].toString(),
-                                            urlImage = doc.document.data["urlImage"].toString()
-                                    )
-                            )
-                        }
-                        adapter.setBooks(bookList);
-                        //saveBooksToLocalDatabase(bookList)
+            db.collection("books")
+                    .get()
+                    .addOnSuccessListener { querySnapshot ->
+                        books = querySnapshot.documents.mapNotNull { it.toObject(Book::class.java) }
+                        if( books == null) books = emptyList()
+
+                        saveBooksToLocalDatabase(books!!)
+                        adapter.setBooks(books!!)
+                    }
+                    .addOnFailureListener {
 
                     }
         } else {
@@ -105,21 +97,14 @@ class BookListActivity : AppCompatActivity() {
         }
     }
 
-
     // TODO: Load Books from Room
     private fun loadBooksFromLocalDb() {
-        //throw NotImplementedError()
-        Log.i("BookListActivity", "loadBooksFromLocalDb")
-        runBlocking {
-            adapter.setBooks((application as MyApplication).getBooksInteractor().getAllBooks())
-        }
+        adapter.setBooks((application as MyApplication).getBooksInteractor().getAllBooks())
     }
 
     // TODO: Save Books to Local Storage
     private fun saveBooksToLocalDatabase(books: List<Book>) {
-        //throw NotImplementedError()
-        Log.i("BookListActivity", "saveBooksToLocalDatabase")
-        runBlocking {
+        AsyncTask.execute {
             (application as MyApplication).getBooksInteractor().saveBooks(books)
         }
     }
