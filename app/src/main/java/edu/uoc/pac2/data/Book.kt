@@ -11,10 +11,12 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "book")
 data class Book(
-        @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "uid") val uid: Int, //clave primaria, autoincremental
+        @PrimaryKey @ColumnInfo(name = "uid") val uid: Int,
         @ColumnInfo(name = "author") val author: String? = null,
         @ColumnInfo(name = "description") val description: String? = null,
         @ColumnInfo(name = "publicationDate") val publicationDate: String? = null,
         @ColumnInfo(name = "title") val title: String? = null,
         @ColumnInfo(name = "urlImage") val urlImage: String? = null
-)
+){
+    constructor() : this(-1, "", "", "", "", "")
+}

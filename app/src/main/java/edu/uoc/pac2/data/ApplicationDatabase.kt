@@ -20,28 +20,11 @@ abstract class ApplicationDatabase: RoomDatabase() {
         private var INSTANCE: ApplicationDatabase? = null
 
         fun getInstance(context: Context): ApplicationDatabase {
-
-            if ( INSTANCE == null ) {
-                synchronized(ApplicationDatabase::class.java) {
-                    if (INSTANCE == null) {
-                        INSTANCE = Room.databaseBuilder(context.applicationContext, ApplicationDatabase::class.java, "book")
-                                //.allowMainThreadQueries() // Uncomment if you don't want to use RxJava or coroutines just yet (blocks UI thread)
-                                .addCallback(object : Callback() {
-                                    override fun onCreate(db: SupportSQLiteDatabase) {
-                                        super.onCreate(db)
-                                        Log.d("MoviesDatabase", "populating with data...")
-                                        //GlobalScope.launch(Dispatchers.IO) { rePopulateDb(INSTANCE) }
-                                    }
-                                }).build()
-                    }
-                }
-            }
-           /* if( INSTANCE == null ) {
+            if (INSTANCE == null) {
                 INSTANCE = Room.databaseBuilder(
-                    context.applicationContext,
-                        ApplicationDatabase::class.java, "book"
-                ).allowMainThreadQueries().fallbackToDestructiveMigration().build()
-            }*/
+                        context.applicationContext,
+                        ApplicationDatabase::class.java, "book").allowMainThreadQueries().fallbackToDestructiveMigration().build()
+            }
             return INSTANCE!!
         }
     }

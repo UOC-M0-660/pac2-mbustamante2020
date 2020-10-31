@@ -11,22 +11,22 @@ package edu.uoc.pac2.data
 class BooksInteractor(private val bookDao: BookDao) {
 
     // TODO: Get All Books from DAO
-    suspend fun getAllBooks(): List<Book> {
+    fun getAllBooks(): List<Book> {
         return bookDao.getAllBooks()
     }
 
     // TODO: Save Book
-    suspend fun saveBook(book: Book) {
+    fun saveBook(book: Book) {
         bookDao.saveBook(book)
     }
 
     // TODO: Save List of Books
-    suspend fun saveBooks(books: List<Book>) {
+    fun saveBooks(books: List<Book>) {
         books.forEach { saveBook(it) }
     }
 
     // TODO: Get Book by id
-    suspend fun getBookById(id: Int): Book? {
+    fun getBookById(id: Int): Book? {
         return bookDao.getBookById(id)
     }
 
