@@ -3,16 +3,21 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:clickable="false"
     android:padding="16dp"
     tools:context="edu.uoc.pac2.ui.BookDetailFragment">
+
 
     <ImageView
         android:id="@+id/book_image"
         android:layout_width="0dp"
         android:layout_height="398dp"
-        android:layout_marginTop="200dp"
-        android:contentDescription="@string/title_book_detail"
+        android:layout_marginTop="10dp"
+        android:contentDescription="@string/todo"
+        android:minHeight="100dp"
         android:scaleType="fitStart"
+        app:layout_collapseMode="parallax"
+        app:layout_scrollFlags="scroll|enterAlways|enterAlwaysCollapsed"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintWidth_percent=".5" />
@@ -23,7 +28,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
-        android:layout_marginTop="220dp"
+        android:layout_marginTop="20dp"
         android:text="@string/todo"
         android:textIsSelectable="true"
         android:textSize="15sp"
