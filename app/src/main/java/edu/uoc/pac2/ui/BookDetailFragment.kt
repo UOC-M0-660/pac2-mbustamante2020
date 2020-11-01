@@ -36,9 +36,13 @@ class BookDetailFragment : Fragment() {
 
     // TODO: Get Book for the given {@param ARG_ITEM_ID} Book id
     private fun loadBook() {
+        Log.i("BookDetailFragment", "39")
         if (arguments?.containsKey(ARG_ITEM_ID)!!) {
+            Log.i("BookDetailFragment", "41")
             val id:Int? = ((arguments?.get(ARG_ITEM_ID) ?: -1) as Int?)
+            Log.i("BookDetailFragment", "43")
             val book = BooksInteractor(context?.let { ApplicationDatabase.getInstance(it).bookDao() }!!).getBookById(id!!) as Book
+            Log.i("BookDetailFragment", "45")
             initUI(book)
         }
     }

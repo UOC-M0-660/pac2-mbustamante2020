@@ -68,6 +68,7 @@ class BooksListAdapter(private var books: List<Book>) : RecyclerView.Adapter<Boo
                     putExtra(BookDetailFragment.ARG_ITEM_ID, book.uid)
                 }
                 v.context.startActivity(intent)
+                //efecto de transicion de abajo hacia arriba
                 (holder.itemView.context as Activity).overridePendingTransition(R.anim.translate_in_bottom, R.anim.translate_in_top)
             }
         }

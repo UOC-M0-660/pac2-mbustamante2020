@@ -34,11 +34,6 @@ class BookListActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_book_list)
 
-        MobileAds.initialize(this) {}
-        mAdView = findViewById(R.id.adView)
-        val adRequest = AdRequest.Builder().build()
-        mAdView.loadAd(adRequest)
-
         // Init UI
         initToolbar()
         initRecyclerView()
@@ -73,9 +68,17 @@ class BookListActivity : AppCompatActivity() {
 
     // TODO: Get Books and Update UI
     private fun getBooks() {
+        //Agrega un anuncio de publicidad con Google AdMob​
+        runOnUiThread {
+            MobileAds.initialize(this) {}
+            mAdView = findViewById(R.id.adView)
+            val adRequest = AdRequest.Builder().build()
+            mAdView.loadAd(adRequest)
+        }
+
         val conection = (application as MyApplication).hasInternetConnection(this)
 
-        Log.i("BookListActivity", conection.toString())
+        //si conection es true carga los libros desde Firebase, en caso contrarios los carga desde Room
         if( conection ) {
             val db = Firebase.firestore
             var books: List<Book>?
@@ -90,7 +93,7 @@ class BookListActivity : AppCompatActivity() {
                         adapter.setBooks(books!!)
                     }
                     .addOnFailureListener {
-
+                        Log.w("Error", it.toString())
                     }
         } else {
             loadBooksFromLocalDb()

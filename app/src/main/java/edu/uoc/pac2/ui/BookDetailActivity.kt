@@ -46,12 +46,11 @@ class BookDetailActivity : AppCompatActivity() {
 
     // TODO: Override finish animation for actionbar back arrow
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-
          when (item.itemId) {
             android.R.id.home -> {
-                NavUtils.navigateUpTo(this, Intent(this, BookListActivity::class.java))
-                //overridePendingTransition(R.anim.translate_out_bottom, R.anim.translate_out_top)
-                overridePendingTransition(R.anim.translate_in_bottom, R.anim.translate_in_top)
+                finish()
+                //efecto de transicion de arriba hacia abajo
+                overridePendingTransition(R.anim.translate_out_bottom, R.anim.translate_out_top)
                 return true
             }
         }
@@ -61,6 +60,7 @@ class BookDetailActivity : AppCompatActivity() {
     // TODO: Override finish animation for phone back button
     override fun onBackPressed() {
         super.onBackPressed()
+        //efecto de transicion de arriba hacia abajo
         overridePendingTransition(R.anim.translate_out_bottom, R.anim.translate_out_top)
     }
 }
