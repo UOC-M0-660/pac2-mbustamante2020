@@ -68,7 +68,9 @@ class BookListActivity : AppCompatActivity() {
 
     // TODO: Get Books and Update UI
     private fun getBooks() {
-        //Agrega un anuncio de publicidad con Google AdMob​
+        // Agrega un anuncio de publicidad con Google AdMob​
+        // En https://apps.admob.com/ cree la cuenta y obtuve el ID de la App, el cual coloque en el Manifest
+        // Tambien obtuve el Id del anuncio, pero utilice el de pruebas de android, para que funcione con anuncios de prueba
         runOnUiThread {
             MobileAds.initialize(this) {}
             mAdView = findViewById(R.id.adView)
