@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "1050751656909",
+    "firebase_url": "https://pec2-m0660.firebaseio.com",
+    "project_id": "pec2-m0660",
+    "storage_bucket": "pec2-m0660.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1050751656909:android:b75915d845f999c1c11a84",
+        "android_client_info": {
+          "package_name": "edu.uoc.pac2"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1050751656909-5lcnfrpftcogfhck7a0iuflkf0a9j6gc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "edu.uoc.pac2",
+            "certificate_hash": "586fabed3e5785849756e0f599641f745afce7b1"
+          }
+        },
+        {
+          "client_id": "1050751656909-2r0stls1qndajbsfuj6733ibl4k287ce.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC0p60v1npa1rEMd10BqZgFMJijhpKfyIA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1050751656909-2r0stls1qndajbsfuj6733ibl4k287ce.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

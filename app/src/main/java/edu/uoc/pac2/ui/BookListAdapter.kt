@@ -1,6 +1,6 @@
 package edu.uoc.pac2.ui
 
-import android.app.ActivityOptions
+import android.app.Activity
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
@@ -62,6 +62,16 @@ class BooksListAdapter(private var books: List<Book>) : RecyclerView.Adapter<Boo
         holder.authorView.text = book.author
 
         // TODO: Set View Click Listener
+        with(holder.view) {
+            setOnClickListener { v ->
+                val intent = Intent(v.context, BookDetailActivity::class.java).apply {
+                    putExtra(BookDetailFragment.ARG_ITEM_ID, book.uid)
+                }
+                v.context.startActivity(intent)
+                //efecto de transicion de abajo hacia arriba
+                (holder.itemView.context as Activity).overridePendingTransition(R.anim.translate_in_bottom, R.anim.translate_in_top)
+            }
+        }
     }
 
     // Returns total items in Adapter
